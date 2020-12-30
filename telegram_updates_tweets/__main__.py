@@ -139,4 +139,13 @@ def fprint(*s):
     print(datetime.now(),*s)
 
 if __name__ == "__main__":
-    main()
+    while True:
+        try:
+            main()
+        except (KeyboardInterrupt, SystemExit):
+            print('bye')
+            break
+        except Exception as e:
+            fprint('Error:', str(e))
+            fprint('Sleeping 60s')
+            sleep(60)
