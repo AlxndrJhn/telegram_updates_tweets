@@ -140,3 +140,5 @@ cython_debug/
 .vscode/settings.json
 anon.session
 anon.session-journal
+telegram_updates_tweets/temp.py
+temp.png

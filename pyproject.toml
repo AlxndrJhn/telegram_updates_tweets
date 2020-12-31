@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telegram_updates_tweets"
-version = "0.1.0"
+version = "0.1.1"
 description = "This package monitors the number of participants in a telegram channel and can post gains/losses updates to twitter"
 authors = ["Alexander Jahn <jahn.alexander@gmail.com>"]
 
@@ -10,6 +10,7 @@ telethon = "^1.18.2"
 tweepy = "^3.10.0"
 click = "^7.1.2"
 pymongo = "^3.11.2"
+matplotlib = "^3.3.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
