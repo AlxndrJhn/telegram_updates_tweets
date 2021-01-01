@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Sensible to set -e to ensure we exit if anything fails
+set -e
+
+# source the poetry workspace
+source ".venv/Scripts/activate"
+
+# black
+black . -l159
+
+# Get the output from your tool.
+# Paths are relative to the root of the repo
+output=$(python -m telegram_updates_tweets --help)
+
+cat README.md.tmpl |
+while read line
+do
+  if [[ $line == *">>> INSERTION POINT FOR HELP OUTPUT <<<"* ]]
+  then
+    echo "$output"
+  else
+    echo "$line"
+  fi
+done > README.md
+git add README.md

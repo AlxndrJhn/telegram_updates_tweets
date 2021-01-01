@@ -224,9 +224,11 @@ def fprint(*s):
 if __name__ == "__main__":
     while True:
         try:
-            main()
-        except (KeyboardInterrupt, SystemExit):
+            main(prog_name="python -m telegram_updates_tweets")
+        except KeyboardInterrupt:
             print("bye")
+            break
+        except SystemExit:
             break
         except Exception as e:
             fprint("Error:", str(e))

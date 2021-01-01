@@ -1,0 +1,36 @@
+# Telegram Updates Tweets
+This package monitors the number of participants in a telegram channel and can post gains/losses updates to twitter.
+It requires a twitter API key and telegram API key.
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install telegram_updates_tweets.
+
+```bash
+pip install telegram_updates_tweets
+```
+
+## Usage
+The package is configured with a bunch of options.
+```cmd
+python -m telegram_updates_tweets --tweet-losses 100 --twitter-key OopN17481741985zgmRg0FVAOzC --twitter-secret VWyvs87I091508915HWAJDdb4XlwOLPkQXOTPbcETEV8HlvmnCx --twitter-access-token 1341085719874981434437-1zh50lhr3WEJhjfabfhdK8oYGrSh3eW --twitter-access-token-secret 5jGpCn79Z8714871kjlafjagaXr7VKeNEKWQVzzU --telegram-api-id 2015515 --telegram-api-hash b7dae63689015901efeffc69 --mongodb 127.0.0.1:27017 --telegram-channel-name CHANNELNAME --tweet-loss-template 'Der Telegram Kanal hat {loss_step} Leser verloren und ist jetzt bei {count}' --tweet-graph-template '24h Bericht, aktuelle Anzahl der Leser ist {count}, Änderung {total_change:+d} Leser' --tweet-graph 20 --tweet-graph-img-template 'Innerhalb der letzten {hours} Std.: {total_change:+d} Leser'
+```
+
+## Options
+```text
+>>> INSERTION POINT FOR HELP OUTPUT <<<
+```
+
+## Development
+1. After cloning this repo execute `git config core.hooksPath hooks` in the root directory.
+2. Install poetry https://python-poetry.org/docs/
+3. `poetry config settings.virtualenvs.in-project true`
+4. `poetry install`
+4. `poetry shell`
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
