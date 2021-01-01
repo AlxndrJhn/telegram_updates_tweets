@@ -86,11 +86,11 @@ def main(
     mongodb,
 ):
     """Connects to telegram as a user and checks every 60minutes the subscriber count of the given channel.
-    It allows to tweet gains and/or losses with additional info. It has a small web interface to configure access to social media."""
+    It allows to tweet gains and/or losses with additional info."""
 
     # twitter
     auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
-    # auth.set_access_token("622518493-6VcLIPprbQbv9wkcBBPvCle8vsjU9fE85Dq9oStl", "tH9aKQbQQ1iRdYTcLSsPwitl44BkAc6jilrsU0ifnXvZhq")
+
     if twitter_access_token is None:
         redirect_url = auth.get_authorization_url()
         fprint("Open the link:", redirect_url)

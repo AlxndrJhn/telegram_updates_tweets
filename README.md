@@ -22,8 +22,7 @@ Usage: python -m telegram_updates_tweets [OPTIONS]
 
   Connects to telegram as a user and checks every 60minutes the subscriber
   count of the given channel. It allows to tweet gains and/or losses with
-  additional info. It has a small web interface to configure access to
-  social media.
+  additional info.
 
 Options:
   --tweet-gains INTEGER           Deactivated if <=0, otherwise describes the
@@ -73,6 +72,20 @@ Options:
 3. `poetry config settings.virtualenvs.in-project true`
 4. `poetry install`
 4. `poetry shell`
+
+## API keys
+To use this package a twitter API key and a telegram API key are needed, these keys will be used to request OAUTH tokens from one twitter account and a telegram account.
+
+1. Create a twitter APP with 'write' permission https://developer.twitter.com/en/portal/projects-and-apps
+- this creates the `--twitter-key` and the ` --twitter-secret`
+- the application will print a `authorization link`, open it, give permission to your own app the use your twitter profile
+- it will print the `--twitter-access-token` and `--twitter-access-token-secret`
+- all subsequent calls should use all four parameters
+2. Create a telegram APP as described in https://core.telegram.org/api/obtaining_api_id
+- this generates a `--telegram-api-id` (numbers) and `--telegram-api-hash` (string)
+- when the appication is started with this parameters, it will ask for your phone number, you will receive a code from telegram, enter it in the application
+- this will create a token file called 'anon.session' and 'anon.session-jornal'
+- all subsequent calls should not prompt for other info
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
