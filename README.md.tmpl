@@ -6,12 +6,21 @@ It requires a twitter API key and telegram API key.
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install telegram_updates_tweets.
 
+### Simple version
+
 ```bash
 pip install telegram_updates_tweets
 ```
 
+### With monitoring and database logging
+
+```bash
+pip install telegram_updates_tweets[logging,monitoring]
+```
+
 ## Usage
 The package is configured with a bunch of options.
+
 ```cmd
 python -m telegram_updates_tweets --tweet-losses 100 --twitter-key OopN17481741985zgmRg0FVAOzC --twitter-secret VWyvs87I091508915HWAJDdb4XlwOLPkQXOTPbcETEV8HlvmnCx --twitter-access-token 1341085719874981434437-1zh50lhr3WEJhjfabfhdK8oYGrSh3eW --twitter-access-token-secret 5jGpCn79Z8714871kjlafjagaXr7VKeNEKWQVzzU --telegram-api-id 2015515 --telegram-api-hash b7dae63689015901efeffc69 --mongodb 127.0.0.1:27017 --telegram-channel-name CHANNELNAME --tweet-loss-template 'Der Telegram Kanal hat {loss_step} Leser verloren und ist jetzt bei {count}' --tweet-graph-template '24h Bericht, aktuelle Anzahl der Leser ist {count}, Änderung {total_change:+d} Leser' --tweet-graph 20 --tweet-graph-img-template 'Innerhalb der letzten {hours} Std.: {total_change:+d} Leser'
 ```

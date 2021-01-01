@@ -3,9 +3,7 @@ from datetime import datetime, timedelta
 from time import sleep
 
 import click
-import pymongo
 import tweepy
-from matplotlib import pyplot as plt
 from telethon import TelegramClient, sync
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.contacts import ResolveUsernameRequest
@@ -52,6 +50,23 @@ from telethon.tl.functions.contacts import ResolveUsernameRequest
     default="Within the last {hours}h: {total_change:+d} participants",
     help="This template will be formatted and used in the image if --tweet-graph is specified",
 )
+@click.option(
+    "--monitoring-port",
+    type=int,
+    default=-1,
+    help="Deactivated if <=0, otherwise 0..65000 specifies the port which allows to fetch monitoring information. Requires --monitoring-password",
+)
+@click.option(
+    "--monitoring-password",
+    type=str,
+    help="Is required if --monitoring-port is set. Is used in basic authentication password, username can be any.",
+)
+@click.option(
+    "--check-frequency",
+    type=int,
+    default=60,
+    help="Check period in seconds",
+)
 @click.option("--twitter-key", type=str, help="Also called API key, is created by the twitter app")
 @click.option("--twitter-secret", type=str, help="The secret of the twitter app")
 @click.option("--twitter-access-token", type=str, help="The access token of the oauth procedure")
@@ -76,6 +91,9 @@ def main(
     tweet_graph_img_template,
     tweet_loss_template,
     tweet_gain_template,
+    monitoring_port,
+    monitoring_password,
+    check_frequency,
     twitter_key,
     twitter_secret,
     twitter_access_token,
@@ -113,18 +131,49 @@ def main(
     # telegram
     tl = TelegramClient("anon", telegram_api_id, telegram_api_hash).start()
 
+    c = 0
+    last_update = None
+
     def get_count():
+        nonlocal c
+        nonlocal last_update
         tw_channel = tl(GetFullChannelRequest(channel=telegram_channel_name))
-        return tw_channel.full_chat.participants_count
+        c = tw_channel.full_chat.participants_count
+        last_update = datetime.now()
 
     # mongo db
     if mongodb:
+        import pymongo
+
         mongo_client = pymongo.MongoClient("mongodb://" + mongodb)
         mongo_db = mongo_client["telegram_updates_tweets"]
         mongo_col = mongo_db[telegram_channel_name]
         fprint("number of datapoints in mongodb:", mongo_col.estimated_document_count())
 
-    c = get_count()
+    # initial count of tl channel
+    get_count()
+
+    # monitoring
+    if monitoring_port > 0:
+        from flask import Flask, request
+        import threading
+
+        app = Flask(__name__)
+
+        @app.route("/")
+        def hello_world():
+            if request.authorization is None or request.authorization.password != monitoring_password:
+                return "wrong password", 401
+            nonlocal last_update
+            time_diff = (datetime.now() - last_update).seconds
+            return f"{time_diff:d} seconds since last check: " + ("OK" if time_diff < check_frequency * 2.1 else "ERROR")
+
+        def monitoring_loop():
+            app.run(host="localhost", port=monitoring_port, debug=True, use_reloader=False)
+
+        monitoring_thread = threading.Thread(target=monitoring_loop)
+        monitoring_thread.start()
+
     numbers = [int(x) for x in re.findall("[0-9]+", last_tweet.text)]
     if numbers:
         last_tweeted_num = min(numbers, key=lambda x: abs(x - c))
@@ -157,38 +206,41 @@ def main(
         last_tweeted_num = count
         update_thresholds()
 
-    def tweet_24h_graph(data):
-        f = "temp.png"
+    if tweet_graph >= 0:
+        from matplotlib import pyplot as plt
 
-        n = datetime.now()
-        start = n - timedelta(days=1)
-        query = {"datetime": {"$gte": str(start), "$lt": str(n)}}
-        last_24h = mongo_col.find(query).sort([("datetime", pymongo.ASCENDING)])
+        def tweet_24h_graph(data):
+            f = "temp.png"
 
-        elements = list(last_24h)
-        all_counts = [d["count"] for d in elements]
-        all_times = [datetime.strptime(d["datetime"], "%Y-%m-%d %H:%M:%S.%f") for d in elements]
-        plt.figure(figsize=(8, 4))
-        plt.plot(all_times, all_counts)
-        plt.grid()
+            n = datetime.now()
+            start = n - timedelta(days=1)
+            query = {"datetime": {"$gte": str(start), "$lt": str(n)}}
+            last_24h = mongo_col.find(query).sort([("datetime", pymongo.ASCENDING)])
 
-        hours = round((all_times[-1] - all_times[0]).seconds / 3600)
-        total_change = all_counts[-1] - all_counts[0]
-        data.update({"hours": hours, "total_change": total_change})
-        if tweet_graph_img_template:
-            plt.title(tweet_graph_img_template.format(**data))
+            elements = list(last_24h)
+            all_counts = [d["count"] for d in elements]
+            all_times = [datetime.strptime(d["datetime"], "%Y-%m-%d %H:%M:%S.%f") for d in elements]
+            plt.figure(figsize=(8, 4))
+            plt.plot(all_times, all_counts)
+            plt.grid()
 
-        plt.tight_layout()
-        plt.savefig(f)
+            hours = round((all_times[-1] - all_times[0]).seconds / 3600)
+            total_change = all_counts[-1] - all_counts[0]
+            data.update({"hours": hours, "total_change": total_change})
+            if tweet_graph_img_template:
+                plt.title(tweet_graph_img_template.format(**data))
 
-        formatted = tweet_graph_template.format(**data)
-        fprint("tweeting:", formatted)
-        tw.update_with_media(f, formatted)
+            plt.tight_layout()
+            plt.savefig(f)
+
+            formatted = tweet_graph_template.format(**data)
+            fprint("tweeting:", formatted)
+            tw.update_with_media(f, formatted)
 
     last_hour = -1
     while True:
         # get count
-        c = get_count()
+        get_count()
         fprint("current participants:", c)
 
         # insert in database
