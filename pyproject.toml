@@ -1,8 +1,16 @@
 [tool.poetry]
 name = "telegram_updates_tweets"
-version = "0.1.1"
+version = "0.1.2"
 description = "This package monitors the number of participants in a telegram channel and can post gains/losses updates to twitter"
 authors = ["Alexander Jahn <jahn.alexander@gmail.com>"]
+keywords = ["twitter-bot", "telegram-bot"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/AlxndrJhn/telegram_updates_tweets"
+repository = "https://github.com/AlxndrJhn/telegram_updates_tweets"
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
