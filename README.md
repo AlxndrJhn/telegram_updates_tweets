@@ -102,8 +102,8 @@ To use this package a twitter API key and a telegram API key are needed, these k
 - all subsequent calls should use all four parameters
 2. Create a telegram APP as described in https://core.telegram.org/api/obtaining_api_id
 - this generates a `--telegram-api-id` (numbers) and `--telegram-api-hash` (string)
-- when the appication is started with this parameters, it will ask for your phone number, you will receive a code from telegram, enter it in the application
-- this will create a token file called 'anon.session' and 'anon.session-jornal'
+- when the application is started with this parameters, it will ask for your phone number, you will receive a code from telegram, enter it in the application
+- this will create a token file called 'anon.session' and 'anon.session-journal'
 - all subsequent calls should not prompt for other info
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
