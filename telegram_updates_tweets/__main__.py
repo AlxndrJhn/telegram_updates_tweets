@@ -1,4 +1,5 @@
 import re
+import traceback
 from datetime import datetime, timedelta
 from time import sleep
 
@@ -155,8 +156,9 @@ def main(
 
     # monitoring
     if monitoring_port > 0:
-        from flask import Flask, request
         import threading
+        from waitress import serve
+        from flask import Flask, request
 
         app = Flask(__name__)
 
@@ -169,10 +171,11 @@ def main(
             return f"{time_diff:d} seconds since last check: " + ("OK" if time_diff < check_frequency * 2.1 else "ERROR")
 
         def monitoring_loop():
-            app.run(host="localhost", port=monitoring_port, debug=True, use_reloader=False)
+            serve(app, listen=f"*:{monitoring_port}")
 
-        monitoring_thread = threading.Thread(target=monitoring_loop)
-        monitoring_thread.start()
+        thread = threading.Thread(target=monitoring_loop)
+        thread.setDaemon(True)
+        thread.start()
 
     numbers = [int(x) for x in re.findall("[0-9]+", last_tweet.text)]
     if numbers:
@@ -284,5 +287,10 @@ if __name__ == "__main__":
             break
         except Exception as e:
             fprint("Error:", str(e))
+            traceback.print_stack()
             fprint("Sleeping 60s")
-            sleep(60)
+            try:
+                sleep(60)
+            except KeyboardInterrupt:
+                print("bye")
+                break

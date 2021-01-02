@@ -22,7 +22,7 @@ pip install telegram_updates_tweets[logging,monitoring]
 The package is configured with a bunch of options.
 
 ```cmd
-python -m telegram_updates_tweets --tweet-losses 100 --twitter-key OopN17481741985zgmRg0FVAOzC --twitter-secret VWyvs87I091508915HWAJDdb4XlwOLPkQXOTPbcETEV8HlvmnCx --twitter-access-token 1341085719874981434437-1zh50lhr3WEJhjfabfhdK8oYGrSh3eW --twitter-access-token-secret 5jGpCn79Z8714871kjlafjagaXr7VKeNEKWQVzzU --telegram-api-id 2015515 --telegram-api-hash b7dae63689015901efeffc69 --mongodb 127.0.0.1:27017 --telegram-channel-name CHANNELNAME --tweet-loss-template 'Der Telegram Kanal hat {loss_step} Leser verloren und ist jetzt bei {count}' --tweet-graph-template '24h Bericht, aktuelle Anzahl der Leser ist {count}, Änderung {total_change:+d} Leser' --tweet-graph 20 --tweet-graph-img-template 'Innerhalb der letzten {hours} Std.: {total_change:+d} Leser'
+python -m telegram_updates_tweets --tweet-losses 100 --twitter-key OopNaGdhsdhgsgRg0FVAOzC --twitter-secret VWyvs87IKYsgsdhdswgg23g3g3gPbcETEV8HlvmnCx --twitter-access-token 134062562626437-1zh50lhr3dggsgsg8oYGrSh3eW --twitter-access-token-secret 5jGpCn79ZexhcQafaf43yt3gNEKWQVzzU --telegram-api-id 20161454 --telegram-api-hash b7dae636835151536egwgf6ffc69 --mongodb 127.0.0.1:27017 --telegram-channel-name CHANNELNAME --tweet-loss-template 'Der Kanal hat {loss_step} Leser verloren und ist jetzt bei {count}' --tweet-graph-template '24h Bericht, aktuelle Anzahl der Leser ist {count}, Änderung {total_change:+d} Leser' --tweet-graph 20 --tweet-graph-img-template 'Innerhalb der letzten {hours} Std.: {total_change:+d} Leser' --monitoring-port 3134 --monitoring-password 'sgwjth23iut2tkjakd'
 ```
 
 ## Options
