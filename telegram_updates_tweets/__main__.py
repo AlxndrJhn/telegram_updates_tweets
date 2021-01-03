@@ -84,7 +84,7 @@ from telethon.tl.functions.contacts import ResolveUsernameRequest
     type=str,
     help="IP:PORT of the mongo db, if not set, no data will be logged",
 )
-def main(
+def tt(
     tweet_gains,
     tweet_losses,
     tweet_graph,
@@ -107,6 +107,12 @@ def main(
     """Connects to telegram as a user and checks every 60minutes the subscriber count of the given channel.
     It allows to tweet gains and/or losses with additional info."""
 
+    # checking input
+    assert twitter_key, "Twitter key is necessary"
+    assert twitter_secret, "Twitter secret is necessary"
+    assert telegram_api_id, "Telegram api id is necessary"
+    assert telegram_api_hash, "Telegram api hash is necessary"
+
     # twitter
     auth = tweepy.OAuthHandler(twitter_key, twitter_secret)
 
@@ -122,15 +128,19 @@ def main(
     else:
         auth.set_access_token(twitter_access_token, twitter_access_token_secret)
 
+    fprint("connecting to twitter...")
     tw = tweepy.API(auth)
     tw_client_id = tw.me().id
     try:
         last_tweet = tw.user_timeline(id=tw_client_id, count=1)[0]
     except:
         last_tweet = ""
+    fprint("ok")
 
     # telegram
+    fprint("connecting to telegram...")
     tl = TelegramClient("anon", telegram_api_id, telegram_api_hash).start()
+    fprint("ok")
 
     c = 0
     last_update = None
@@ -144,6 +154,7 @@ def main(
 
     # mongo db
     if mongodb:
+        fprint(f"connecting to mongodb ({mongodb})...")
         import pymongo
 
         mongo_client = pymongo.MongoClient("mongodb://" + mongodb)
@@ -156,6 +167,7 @@ def main(
 
     # monitoring
     if monitoring_port > 0:
+        fprint("opening monitoring port...")
         import threading
         from waitress import serve
         from flask import Flask, request
@@ -176,6 +188,7 @@ def main(
         thread = threading.Thread(target=monitoring_loop)
         thread.setDaemon(True)
         thread.start()
+        fprint("ok")
 
     numbers = [int(x) for x in re.findall("[0-9]+", last_tweet.text)]
     if numbers:
@@ -279,15 +292,18 @@ def fprint(*s):
 if __name__ == "__main__":
     while True:
         try:
-            main(prog_name="python -m telegram_updates_tweets")
+            tt(auto_envvar_prefix="TT", prog_name="python -m telegram_updates_tweets")
         except KeyboardInterrupt:
             print("bye")
             break
         except SystemExit:
             break
+        except AssertionError as e:  # critical errors
+            fprint("Error:", str(e))
+            break
         except Exception as e:
             fprint("Error:", str(e))
-            traceback.print_stack()
+            print(traceback.format_exc())
             fprint("Sleeping 60s")
             try:
                 sleep(60)
