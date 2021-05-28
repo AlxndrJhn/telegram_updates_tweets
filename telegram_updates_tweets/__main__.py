@@ -287,6 +287,7 @@ def tt(
             "loss_step": tweet_losses,
             "count": c,
             "gain_step": tweet_gains,
+            "lower_threshold": lower_threshold,
         }
 
         # tweet report once at a specific hour
