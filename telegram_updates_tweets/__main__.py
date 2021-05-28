@@ -68,9 +68,17 @@ from telethon.tl.functions.contacts import ResolveUsernameRequest
     default=60,
     help="Check period in seconds",
 )
-@click.option("--twitter-key", type=str, help="Also called API key, is created by the twitter app")
+@click.option(
+    "--twitter-key",
+    type=str,
+    help="Also called API key, is created by the twitter app",
+)
 @click.option("--twitter-secret", type=str, help="The secret of the twitter app")
-@click.option("--twitter-access-token", type=str, help="The access token of the oauth procedure")
+@click.option(
+    "--twitter-access-token",
+    type=str,
+    help="The access token of the oauth procedure",
+)
 @click.option(
     "--twitter-access-token-secret",
     type=str,
@@ -78,7 +86,11 @@ from telethon.tl.functions.contacts import ResolveUsernameRequest
 )
 @click.option("--telegram-api-id", type=int, help="The number created by telegram")
 @click.option("--telegram-api-hash", type=str, help="The api hash created by telegram")
-@click.option("--telegram-channel-name", type=str, help="The name of the channel of interest")
+@click.option(
+    "--telegram-channel-name",
+    type=str,
+    help="The name of the channel of interest",
+)
 @click.option(
     "--mongodb",
     type=str,
@@ -121,7 +133,10 @@ def tt(
         fprint("Open the link:", redirect_url)
         verifier = input("Enter verifier: ")
         token = auth.request_token["oauth_token"]
-        auth.request_token = {"oauth_token": token, "oauth_token_secret": verifier}
+        auth.request_token = {
+            "oauth_token": token,
+            "oauth_token_secret": verifier,
+        }
         auth.get_access_token(verifier)
         fprint("--twitter-access-token", auth.access_token)
         fprint("--twitter-access-token-secret", auth.access_token_secret)
@@ -160,7 +175,10 @@ def tt(
         mongo_client = pymongo.MongoClient("mongodb://" + mongodb)
         mongo_db = mongo_client["telegram_updates_tweets"]
         mongo_col = mongo_db[telegram_channel_name]
-        fprint("number of datapoints in mongodb:", mongo_col.estimated_document_count())
+        fprint(
+            "number of datapoints in mongodb:",
+            mongo_col.estimated_document_count(),
+        )
 
     # initial count of tl channel
     get_count()
@@ -269,6 +287,7 @@ def tt(
             "loss_step": tweet_losses,
             "count": c,
             "gain_step": tweet_gains,
+            "lower_threshold": lower_threshold,
         }
 
         # tweet report once at a specific hour
@@ -292,7 +311,10 @@ def fprint(*s):
 if __name__ == "__main__":
     while True:
         try:
-            tt(auto_envvar_prefix="TT", prog_name="python -m telegram_updates_tweets")
+            tt(
+                auto_envvar_prefix="TT",
+                prog_name="python -m telegram_updates_tweets",
+            )
         except KeyboardInterrupt:
             print("bye")
             break
