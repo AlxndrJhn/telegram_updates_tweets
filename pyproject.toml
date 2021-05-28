@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telegram_updates_tweets"
-version = "0.1.4"
+version = "0.1.5"
 description = "This package monitors the number of participants in a telegram channel and can post gains/losses updates to twitter"
 authors = ["Alexander Jahn <jahn.alexander@gmail.com>"]
 keywords = ["twitter-bot", "telegram-bot"]
