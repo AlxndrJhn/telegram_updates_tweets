@@ -920,13 +920,13 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "waitress"
-version = "1.4.4"
+version = "2.1.2"
 description = "Waitress WSGI server"
 optional = true
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+python-versions = ">=3.7.0"
 files = [
-    {file = "waitress-1.4.4-py2.py3-none-any.whl", hash = "sha256:3d633e78149eb83b60a07dfabb35579c29aac2d24bb803c18b26fb2ab1a584db"},
-    {file = "waitress-1.4.4.tar.gz", hash = "sha256:1bb436508a7487ac6cb097ae7a7fe5413aefca610550baf58f0940e51ecfb261"},
+    {file = "waitress-2.1.2-py3-none-any.whl", hash = "sha256:7500c9625927c8ec60f54377d590f67b30c8e70ef4b8894214ac6e4cad233d2a"},
+    {file = "waitress-2.1.2.tar.gz", hash = "sha256:780a4082c5fbc0fde6a2fcfe5e26e6efc1e8f425730863c04085769781f51eba"},
 ]
 
 [package.extras]
@@ -981,4 +981,4 @@ monitoring = ["Flask", "waitress"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "50af748365e76a29c27205c52a6934eaa072a2b386320c28a06f3ef30bd4bb2d"
+content-hash = "f93df8aa5a88d13f9b65690287d63491f05889751c3effc50c4b7963651fd5d3"
